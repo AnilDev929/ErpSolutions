@@ -1,0 +1,21 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ERP_SOLUTIONS.Models.Entities
+{
+    public class Role
+    {
+        public int RoleID { get; set; }
+
+        [StringLength(30)]
+        [Display(Name = "Role Name")]
+        public string RoleName { get; set; } = string.Empty;
+
+        [StringLength(250)]
+        public string? Description { get; set; } = string.Empty;
+
+        [Display(Name = "Active")]
+        public bool IsActive { get; set; } = true;
+
+        public Role() { }
+    }
+}

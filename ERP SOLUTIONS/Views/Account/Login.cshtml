@@ -1,0 +1,154 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Login - School ERP";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            /* Restore the gradient background to the whole page */
+            background: linear-gradient(to right, #4e73df, #1cc88a);
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* important */
+            /* justify-content: center;
+            align-items: center; */
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-content {
+            flex: 1; /* pushes footer down */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-wrapper {
+            display: flex;
+            width: 850px;
+            border-radius: 15px;
+            overflow: hidden; /* important for seamless join */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: #fff;
+        }
+
+        /* Left: Login Panel */
+        .login-left {
+            flex: 1;
+            padding: 2rem;
+            background: #4b2e83; /* purple like your image */
+            color: #fff;
+        }
+
+        .login-card .form-control:focus {
+            box-shadow: none;
+            border-color: #4e73df;
+        }
+
+        .login-card .btn-primary {
+            background-color: #4e73df;
+            border: none;
+        }
+
+            .login-card .btn-primary:hover {
+                background-color: #2e59d9;
+            }
+
+        .role-select {
+            margin-bottom: 1rem;
+        }
+
+        /* Right: Illustration Panel */
+        .login-right {
+
+            flex: 1;
+            background: #f8f9fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-right img {
+            max-width: 100%; /* fill container height */
+            height: auto;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        @@media (max-width: 768px) {
+            .login-wrapper
+            {
+                flex-direction: column;
+                    width: 100%;
+                    margin: 20px;
+            }
+
+            .login-right {
+                max-width: 250px;
+                min-width: 150px;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="login-wrapper">
+            <!-- Left: Login Card -->
+            <div class="login-left">
+                <div class="login-card">
+                    <h3 class="text-center mb-4"><i class="fas fa-school me-2"></i>School ERP Login</h3>
+                    <form asp-action="Login" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">User name</label>
+                            <input type="text" class="form-control" id="username" name="Username" value="ArunK" placeholder="Enter username" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="Password" value="Password@123" placeholder="Enter password" />
+                        </div>
+                        <div class="mb-3 role-select">
+                            <label for="role" class="form-label">Login As</label>
+                            <select class="form-select" id="role" name="Role">
+                                <option value="" selected disabled>Select Role</option>
+                                <option value="Admin" selected>Admin</option>
+                                <option value="Faculty">Faculty</option>
+                                <option value="Student">Student</option>
+                            </select>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Side Panel -->
+            <div class="login-right">
+                <img src="~/images/school-erp.png" alt="School ERP Illustration" />
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-center text-white py-2">
+        <small>&copy; @DateTime.Now.Year School ERP</small>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
