@@ -1,12 +1,9 @@
-﻿using ERP_SOLUTIONS.Data;
-using ERP_SOLUTIONS.Models.Entities;
+﻿using ERP_SOLUTIONS.Models.Entities;
 using ERP_SOLUTIONS.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERP_SOLUTIONS.Controllers
 {
-    [Authorize]
     public class ClassesController : Controller
     {
         private readonly IClassService _classService;
@@ -16,116 +13,88 @@ namespace ERP_SOLUTIONS.Controllers
             _classService = classService;
         }
 
-        // ✅ READ (LIST)
         public async Task<IActionResult> Index()
         {
-            var classes = await _classService.GetAllAsync();
+            var classes = await _classService.GetAllClassesAsync();
             return View(classes);
         }
 
-        // ✅ READ (DETAILS)
-        public async Task<IActionResult> Details(int id)
-        {
-            var cls = await _classService.GetByIdAsync(id);
-
-            if (cls == null)
-                return NotFound();
-
-            return View(cls);
-        }
-
-        // ✅ CREATE (GET)
+        // GET: Create
         public IActionResult Create()
         {
-            return View();
+            ViewBag.Title = "Add Class";
+            return View(new ClassModel());
         }
 
-        // ✅ CREATE (POST)
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SchoolClass model)
+        public async Task<IActionResult> Create(ClassModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+
+            bool success = await _classService.AddClassAsync(model);
+            if (success)
             {
-                var result = await _classService.AddAsync(model);
-
-                if (!result)
-                {
-                    ModelState.AddModelError("", "Class already exists!");
-                    return View(model);
-                }
-
-                TempData["Success"] = "Class created successfully!";
+                TempData["SuccessMessage"] = $"Class '{model.ClassName}' added successfully!";
                 return RedirectToAction(nameof(Index));
             }
-
+            ModelState.AddModelError(string.Empty, "Duplicate class name found.");
             return View(model);
         }
 
-        // ✅ EDIT (GET)
+
+        // GET: Edit
         public async Task<IActionResult> Edit(int id)
         {
-            var cls = await _classService.GetByIdAsync(id);
+            var cls = await _classService.GetClassByIdAsync(id);
+            if (cls == null) return NotFound();
 
-            if (cls == null)
-                return NotFound();
-
-            return View(cls);
+            ViewBag.Title = "Edit Class";
+            return View("Create", cls); // reuse Create view
         }
 
-        // ✅ EDIT (POST)
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SchoolClass model)
+        public async Task<IActionResult> Edit(int id, ClassModel model)
         {
-            if (id != model.ClassID)
-                return NotFound();
+            if (id != model.ClassId) return BadRequest();
+            if (!ModelState.IsValid) return View("Create", model);
 
-            if (ModelState.IsValid)
+            bool success = await _classService.UpdateClassAsync(model);
+            if (success)
             {
-                var result = await _classService.UpdateAsync(model);
-
-                if (!result)
-                {
-                    ModelState.AddModelError("", "Duplicate class exists!");
-                    return View(model);
-                }
-
-                TempData["Success"] = "Class updated successfully!";
+                TempData["SuccessMessage"] = $"Class '{model.ClassName}' updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(model);
+            ModelState.AddModelError(string.Empty, "Duplicate class name found.");
+            return View("Create", model);
         }
 
-        // ✅ DELETE (GET - Confirmation Page)
+        // GET: Delete confirmation
         public async Task<IActionResult> Delete(int id)
         {
-            var cls = await _classService.GetByIdAsync(id);
-
-            if (cls == null)
-                return NotFound();
+            var cls = await _classService.GetClassByIdAsync(id);
+            if (cls == null) return NotFound();
 
             return View(cls);
         }
 
-        // ✅ DELETE (POST)
+        // POST: Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _classService.DeleteAsync(id);
-
-            TempData["Success"] = "Class deleted successfully!";
+            bool success = await _classService.DeleteClassAsync(id);
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Class deleted successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["ErrorMessage"] = "Error deleting class!";
             return RedirectToAction(nameof(Index));
         }
 
-        // ✅ EXISTS CHECK (OPTIONAL API)
-        [HttpGet]
-        public async Task<IActionResult> Exists(int id)
-        {
-            var exists = await _classService.ExistsAsync(id);
-            return Json(exists);
-        }
     }
 }

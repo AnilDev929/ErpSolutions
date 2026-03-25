@@ -4,11 +4,10 @@ namespace ERP_SOLUTIONS.Services.Interfaces
 {
     public interface IClassService
     {
-        Task<IEnumerable<SchoolClass>> GetAllAsync();
-        Task<SchoolClass?> GetByIdAsync(int id);
-        Task<bool> AddAsync(SchoolClass cls);
-        Task<bool> UpdateAsync(SchoolClass cls);
-        Task DeleteAsync(int id);
-        Task<bool> ExistsAsync(int id);
+        Task<IEnumerable<ClassModel>> GetAllClassesAsync();
+        Task<ClassModel> GetClassByIdAsync(int id);
+        Task<bool> AddClassAsync(ClassModel newClass);
+        Task<bool> UpdateClassAsync(ClassModel updatedClass);
+        Task<bool> DeleteClassAsync(int id);
     }
 }

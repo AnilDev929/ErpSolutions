@@ -1,4 +1,5 @@
 ﻿using ERP_SOLUTIONS.Data;
+using ERP_SOLUTIONS.Models.DTOS;
 using ERP_SOLUTIONS.Models.Entities;
 using ERP_SOLUTIONS.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,19 @@ namespace ERP_SOLUTIONS.Services.Implementations
         public AcademicYearService(AppDbContext context)
         {
             _context = context;
+        }
+
+        public IEnumerable<AcademicYearDropdownDto> GetAll()
+        {
+            return _context.AcademicYears
+                           .Where(a => a.IsActive)
+                           .OrderByDescending(a => a.YearStart)
+                           .Select(a => new AcademicYearDropdownDto
+                           {
+                               AcademicYearID = a.AcademicYearID,
+                               YearName = a.YearName
+                           })
+                           .ToList();
         }
 
         public async Task<List<AcademicYear>> GetAllAsync()

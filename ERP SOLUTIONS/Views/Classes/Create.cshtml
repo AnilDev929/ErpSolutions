@@ -1,114 +1,43 @@
 ﻿@using ERP_SOLUTIONS.Models.Entities
-@model SchoolClass
+@model ClassModel
 
 @{
-    ViewData["Title"] = "Create Class";
+    ViewBag.Title = ViewBag.Title ?? "Add/Edit Class";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-7 col-md-9">
-            <div class="card border shadow-sm rounded-4">
+    <div class="card shadow-sm rounded">
+        <div class="card-header bg-primary text-white d-flex align-items-center py-3 px-4">
+            <i class="fas fa-chalkboard fa-2x me-1"></i>
+            <h3 class="mb-0 font-weight-bold">@ViewBag.Title</h3>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-4">Fill in the details below to @ViewBag.Title.ToLower() a class.</p>
 
-                <!-- Header -->
-                <div class="card-header bg-white border-bottom py-3 px-4">
-                    <h4 class="fw-bold text-dark mb-1">
-                        <i class="fas fa-chalkboard text-primary me-2"></i>
-                        Create New Class
-                    </h4>
-                    <p class="text-muted mb-0 small">
-                        Add class details for your college system
-                    </p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+                <div class="form-group mb-3">
+                    <label for="ClassName" class="font-weight-bold">
+                        <i class="fas fa-pencil-alt me-1"></i> Class Name
+                    </label>
+                    @Html.TextBoxFor(m => m.ClassName, new { @class = "form-control", placeholder = "Enter class name" })
+                    @Html.ValidationMessageFor(m => m.ClassName, "", new { @class = "text-danger" })
                 </div>
 
-                <!-- Body -->
-                <div class="card-body p-4">
-
-                    <form asp-action="Create">
-
-                        <!-- Class Name -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-muted">Class Name</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0">
-                                    <i class="fas fa-chalkboard text-primary"></i>
-                                </span>
-                                <input asp-for="ClassName" class="form-control border-start-0"
-                                       placeholder="e.g. BSc Computer Science" />
-                            </div>
-                            <span asp-validation-for="ClassName" class="text-danger small"></span>
-                        </div>
-
-                        <!-- Stream -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-muted">Stream</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0">
-                                    <i class="fas fa-book-open text-primary"></i>
-                                </span>
-                                <input asp-for="Stream" class="form-control border-start-0"
-                                       placeholder="Science / Commerce / Arts" />
-                            </div>
-                        </div>
-
-                        <!-- Department Code -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-muted">Department Code</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0">
-                                    <i class="fas fa-hashtag text-primary"></i>
-                                </span>
-                                <input asp-for="DeptCode" class="form-control border-start-0"
-                                       placeholder="Optional (e.g. CS101)" />
-                            </div>
-                        </div>
-
-                        <!-- Duration + Status -->
-                        <div class="row mb-2">
-
-                            <!-- Duration -->
-                            <div class="col-md-7 mb-3">
-                                <label class="form-label fw-semibold text-muted">Course Duration</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-0">
-                                        <i class="fas fa-clock text-primary"></i>
-                                    </span>
-                                    <input asp-for="Duration" class="form-control border-start-0"
-                                           placeholder="Duration in years" />
-                                </div>
-                            </div>
-
-                            <!-- Status -->
-                            <div class="col-md-5 d-flex align-items-end mb-3">
-                                <div class="form-check form-switch mt-2">
-                                    <input asp-for="IsActive" class="form-check-input" />
-                                    <label class="form-check-label ms-2 text-muted fw-semibold">
-                                        Active Status
-                                    </label>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Buttons -->
-                        <div class="d-flex justify-content-between mt-4 pt-2 border-top">
-                            <a asp-action="Index" class="btn btn-light border rounded-pill px-4">
-                                Cancel
-                            </a>
-
-                            <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                                <i class="fas fa-check me-2"></i> Save Class
-                            </button>
-                        </div>
-
-                    </form>
-
+                <div class="d-flex justify-content-start gap-2 mt-4">
+                    <button type="submit" class="btn btn-success d-flex align-items-center px-4">
+                        <i class="fas fa-save me-1"></i> @ViewBag.Title
+                    </button>
+                    <a href="@Url.Action("Index")" class="btn btn-secondary d-flex align-items-center px-4">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
                 </div>
-            </div>
-
+            }
         </div>
     </div>
 </div>
-

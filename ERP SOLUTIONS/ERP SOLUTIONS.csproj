@@ -28,7 +28,6 @@
 	<ItemGroup>
 	  <Folder Include="Repositories\" />
 	  <Folder Include="wwwroot\image\" />
-	  <Folder Include="wwwroot\Css\" />
 	</ItemGroup>
 
 </Project>

@@ -38,10 +38,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IStudentProfileService, StudentProfileService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IClassService, ClassService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<IHostelService, HostelService>();
 
 // Swagger (for future API use)
 builder.Services.AddEndpointsApiExplorer();

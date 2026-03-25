@@ -16,6 +16,18 @@
 # Mono auto generated files
 mono_crash.*
 
+# Build folders
+bin/
+obj/
+
+# User-specific files
+# =========================
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -331,6 +343,11 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# NuGet packages
+*.nupkg
+packages/
+.nuget/
 
 # OpenCover UI analysis results
 OpenCover/
