@@ -1,0 +1,40 @@
+1. Users & Roles
+-------------------
+Users → Stores login info
+Roles → Stores role types (Admin, Teacher, Student, Accountant, etc.)
+UserRoles → Many-to-many between Users and Roles
+LoginAttempts → Track login attempts
+
+
+Genders
+Genders → Used for Students and Teachers
+
+2. Academic Structure
+------------------------
+AcademicYears → Represents school years (2025-2026)
+Classes → 10, 9, etc.
+Sections → A, B, C
+ClassSections → Many-to-many between Classes & Sections
+
+Subjects & Teachers
+---------------------------------
+Subjects → Physics, Math, etc.
+Teachers → Linked to Users & Genders
+ClassSubjects → Teacher teaches Subject in a Class
+
+
+3. Students & Enrollment
+
+Students → Linked to Users, Genders, and ClassSections
+StudentEnrollments → Tracks historical class/year per student (promotion system)
+
+4. Attendance & Exams
+Attendance → Tracks per-student per-subject attendance
+Exams → Exam type per academic year
+ExamSchedules → Specific exam dates per class & subject
+Marks → Student marks for exams, with grades
+
+5.Fees
+CourseFees → Defines expected fees per class/year
+StudentFees → Tracks student payment against CourseFees
+FeePayments → Multiple payments for a single student fee
