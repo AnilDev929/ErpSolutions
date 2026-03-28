@@ -22,7 +22,7 @@ namespace ERP_SOLUTIONS.Controllers
         public IActionResult Login(LoginDTO login)
         {
             var user = _context.Users
-                .FirstOrDefault(x => x.Username == login.Username && x.IsActive);
+                .FirstOrDefault(x => x.UserName == login.Username && x.IsActive);
 
             if (user == null)
                 return Unauthorized("Invalid username or password");
@@ -31,7 +31,7 @@ namespace ERP_SOLUTIONS.Controllers
             if (user.PasswordHash != login.Password)
                 return Unauthorized("Invalid username or password");
 
-            var token = _jwtHelper.GenerateToken(user.Username, user.Role);
+            var token = _jwtHelper.GenerateToken(user.UserName, user.Role);
 
             return Ok(new
             {

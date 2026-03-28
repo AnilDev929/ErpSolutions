@@ -235,13 +235,13 @@ namespace ERP_SOLUTIONS.Services.Implementations
         public void AllocateRoom(int studentId, int roomId)
         {
             //var activeAllocation = db.StudentHostelAllocations
-            //    .FirstOrDefault(x => x.StudentId == studentId && x.IsActive);
+            //    .FirstOrDefault(x => x.StudentId == studentId && x.Status);
 
             //if (activeAllocation != null)
             //    throw new Exception("Student already assigned!");
 
             //var roomCount = db.StudentHostelAllocations
-            //    .Count(x => x.RoomId == roomId && x.IsActive);
+            //    .Count(x => x.RoomId == roomId && x.Status);
 
             //var room = db.Rooms.Find(roomId);
 
@@ -253,7 +253,7 @@ namespace ERP_SOLUTIONS.Services.Implementations
             //    StudentId = studentId,
             //    RoomId = roomId,
             //    JoinDate = DateTime.Now,
-            //    IsActive = true
+            //    Status = true
             //};
 
             //db.StudentHostelAllocations.Add(allocation);
@@ -263,7 +263,7 @@ namespace ERP_SOLUTIONS.Services.Implementations
         public void GenerateMonthlyFees(DateTime month)
         {
             //var students = db.StudentHostelAllocations
-            //    .Where(x => x.IsActive)
+            //    .Where(x => x.Status)
             //    .ToList();
 
             //foreach (var s in students)

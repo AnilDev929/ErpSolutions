@@ -21,6 +21,14 @@ builder.Logging.AddDebug();     // Logs to Visual Studio debug output
 
 // MVC (UI + Controllers)
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();  // required for session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 // ✅ Add Cookie Authentication (for MVC login)
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -38,6 +46,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IStudentProfileService, StudentProfileService>();
@@ -46,51 +55,27 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IClassService, ClassService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IHostelService, HostelService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+
+
+
+builder.Services.AddScoped<MenuService>(); //One instance per HTTP request
+// Helpers
+builder.Services.AddScoped<JwtHelper>(); // keep for future JWT use
+
+
+builder.Services.AddAuthorization();
+// Session + HTTP
+builder.Services.AddSession();
+builder.Services.AddHttpClient();
+
+//Register memory cache
+builder.Services.AddMemoryCache();
 
 // Swagger (for future API use)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
-
-// Helpers
-builder.Services.AddScoped<JwtHelper>(); // keep for future JWT use
-
-//// ✅ 👉 PUT AUTHENTICATION HERE
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = "MyCookieAuth";
-//    options.DefaultChallengeScheme = "MyCookieAuth";
-//})
-//.AddCookie("MyCookieAuth", options =>
-//{
-//    options.LoginPath = "/Account/Login";
-//})
-//.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//        ValidAudience = builder.Configuration["Jwt:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey(
-//            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-//        )
-//    };
-//});
-
-//builder.Services.AddAuthorization();
-
-// Session + HTTP
-builder.Services.AddSession();
-builder.Services.AddHttpClient();
-
-
-builder.Services.AddAuthorization();
 
 // =====================
 // BUILD APP
@@ -135,11 +120,17 @@ app.Use(async (context, next) =>
 // =====================
 // ROUTING
 // =====================
+// Redirect root URL "/" to "/Home"
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/Home");
+    return Task.CompletedTask;
+});
 
 // Default route → Login page
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}"
+    pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
 // API Controllers (for future use)

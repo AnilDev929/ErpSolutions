@@ -8,6 +8,6 @@ namespace ERP_SOLUTIONS.Models.Entities
         public int GenderID { get; set; }
 
         [Required]
-        public int GenderName { get; set; }
+        public string GenderName { get; set; }
     }
 }

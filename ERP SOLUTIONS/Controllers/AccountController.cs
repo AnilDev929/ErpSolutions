@@ -1,5 +1,5 @@
 ﻿
-using ERP_SOLUTIONS.Models.Entities;
+using ERP_SOLUTIONS.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -8,12 +8,15 @@ using System.Security.Claims;
 
 namespace ERP_SOLUTIONS.Controllers
 {
+    [AllowAnonymous]  // Make login accessible to all
     public class AccountController :Controller
     {
         private readonly IHttpClientFactory _clientFactory;
-        public AccountController(IHttpClientFactory clientFactory)
+        private readonly IAccountService _accountService;
+        public AccountController(IHttpClientFactory clientFactory, IAccountService accountService)
         {
             _clientFactory = clientFactory;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -21,17 +24,23 @@ namespace ERP_SOLUTIONS.Controllers
         {
             return View();
         }
-
+        
         // POST: Login
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string Username, string Password, string Role)
         {
-            // TODO: Replace with real user validation
-            if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(Role))
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+            {
+                ViewBag.Error = "Username and Password are required";
+                return View();
+            }
+            
+            var result = await _accountService.LoginAsync(Username, Password, Role);
+
+            if (result.Success)
             {
                 int userid = 1; // Replace with actual user ID
-
                 // Create claims
                 var claims = new List<Claim>
                 {
@@ -52,7 +61,7 @@ namespace ERP_SOLUTIONS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            ViewBag.Error = "Invalid login attempt";
+            ViewBag.Error = result.Message;
             return View();
         }
 

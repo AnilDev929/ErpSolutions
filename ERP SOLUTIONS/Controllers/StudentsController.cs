@@ -41,7 +41,7 @@ namespace ERP_SOLUTIONS.Controllers
 
                 return View(userProfile); // pass model to view
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log exception
                 //_logger.LogError(ex, "Error loading profile for user {UserName}", User.Identity.Name);
@@ -77,7 +77,7 @@ namespace ERP_SOLUTIONS.Controllers
                 TempData["SuccessMessage"] = "Profile updated successfully!";
                 return RedirectToAction("MyProfile");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //_logger.LogError(ex, "Error updating profile for user {UserName}", User.Identity.Name);
                 ModelState.AddModelError("", "Failed to update profile. Please try again later.");

@@ -16,6 +16,11 @@ namespace ERP_SOLUTIONS.Models.Entities
         [Display(Name = "Active")]
         public bool IsActive { get; set; } = true;
 
+        public List<RoleMenuAccess> RoleMenuAccesses { get; set; } = new List<RoleMenuAccess>();
+
+        // Navigation property to link users
+        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+
         public Role() { }
     }
 }
